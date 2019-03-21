@@ -70,4 +70,5 @@ public class Player : NetworkBehaviour
     }
     [SyncVar]
     public int score;
+
 }
