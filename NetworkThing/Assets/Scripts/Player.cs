@@ -17,7 +17,10 @@ public class Player : NetworkBehaviour
     }
     void Update()
     {
-        GetInput();
+        if (isLocalPlayer && hasAuthority)
+            {
+            GetInput();
+        }
     }
     void GetInput()
     {
