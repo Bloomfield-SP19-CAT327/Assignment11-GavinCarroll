@@ -26,10 +26,27 @@ public class Player : NetworkBehaviour
     {
         float x = Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime;
         float y = Input.GetAxisRaw("Vertical") * moveSpeed * Time.deltaTime;
-        MoveIt(x, y);
+
+        if (isServer)
+        {
+            RpcMoveIt(x, y);
+        }
+        else
+        {
+            CmdMoveIt(x, y);
+        }
     }
-    void MoveIt(float x, float y)
+
+    [ClientRpc]
+    void RpcMoveIt(float x, float y)
     {
         transform.Translate(x, y, 0);
     }
+
+    [Command]
+    public void CmdMoveIt(float x, float y)
+    {
+        RpcMoveIt(x, y);
+    }
+
 }
