@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 
 public class Player : NetworkBehaviour
 {
+    public GameObject bulletPrefab;
     float moveSpeed = 1.875f;
 
     [SyncVar]
@@ -27,6 +28,10 @@ public class Player : NetworkBehaviour
         float x = Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime;
         float y = Input.GetAxisRaw("Vertical") * moveSpeed * Time.deltaTime;
 
+        if (Input.GetButtonUp("Fire1"))
+        {
+            CmdDoFire();
+        }
         if (isServer)
         {
             RpcMoveIt(x, y);
@@ -49,4 +54,13 @@ public class Player : NetworkBehaviour
         RpcMoveIt(x, y);
     }
 
+    [Command]
+    public void CmdDoFire()
+    {
+        GameObject Bullet = (GameObject)Instantiate(bulletPrefab, this.transform.position + this.transform.right, Quaternion.identity);
+        Bullet.GetComponent<Rigidbody>().velocity = Vector3.forward * 17.5f;
+        Bullet.GetComponent<Bullet>().color = color;
+        Destroy(Bullet, 0.875f);
+        NetworkServer.Spawn(Bullet);
+    }
 }
