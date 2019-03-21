@@ -6,6 +6,10 @@ using System.Collections;
 
 public class Bullet : NetworkBehaviour
 {
+    void OnTriggerEnter(Collider other)
+    {
+        Destroy(other.gameObject);
+    }
     [SyncVar]
     public Color color;
 
