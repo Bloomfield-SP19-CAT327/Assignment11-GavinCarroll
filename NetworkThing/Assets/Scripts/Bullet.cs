@@ -8,7 +8,12 @@ public class Bullet : NetworkBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        Destroy(other.gameObject);
+        if (isServer)
+        {
+            Player player = ClientScene.FindLocalObject(parentNetId).GetComponent<Player>();
+            player.score += 100;
+            Destroy(other.gameObject);
+        }
     }
     [SyncVar]
     public Color color;
@@ -17,4 +22,6 @@ public class Bullet : NetworkBehaviour
     {
         gameObject.GetComponent<Renderer>().material.color = color;
     }
+    [SyncVar]
+    public NetworkInstanceId parentNetId;
 }

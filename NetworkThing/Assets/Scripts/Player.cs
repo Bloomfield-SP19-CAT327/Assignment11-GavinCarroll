@@ -57,10 +57,13 @@ public class Player : NetworkBehaviour
     [Command]
     public void CmdDoFire()
     {
-        GameObject Bullet = (GameObject)Instantiate(bulletPrefab, this.transform.position + this.transform.right, Quaternion.identity);
-        Bullet.GetComponent<Rigidbody>().velocity = Vector3.forward * 17.5f;
-        Bullet.GetComponent<Bullet>().color = color;
-        Destroy(Bullet, 0.875f);
-        NetworkServer.Spawn(Bullet);
+        GameObject bullet = (GameObject)Instantiate(bulletPrefab, this.transform.position + this.transform.right, Quaternion.identity);
+        bullet.GetComponent<Rigidbody>().velocity = Vector3.forward * 17.5f;
+        bullet.GetComponent<Bullet>().color = color;
+        bullet.GetComponent<Bullet>().parentNetId = this.netId;
+        Destroy(bullet, 0.875f);
+        NetworkServer.Spawn(bullet);
     }
+    [SyncVar]
+    public int score;
 }
